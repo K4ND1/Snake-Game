@@ -10,18 +10,7 @@ public class appleScript : MonoBehaviour
         {
             other.GetComponent<snakeControllScript>().PickedApple();
 
-            int iterations = Mathf.RoundToInt(other.GetComponent<snakeControllScript>().bodyParts.Count / 3); 
-
-            if (iterations < 1)
-            {
-                iterations = 1; // Ensure at least one apple is spawned
-            }
-        
-            for (int i = 0; i < iterations; i++)
-            {
-                SpawnApple();
-            }
-
+            SpawnApple();
             Destroy(gameObject);
         }
     }
@@ -45,3 +34,4 @@ public class appleScript : MonoBehaviour
         Instantiate(gameObject, new Vector3(x, y, 0), Quaternion.identity);
     }
 }
+
