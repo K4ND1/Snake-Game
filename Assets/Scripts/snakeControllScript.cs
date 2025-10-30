@@ -8,6 +8,8 @@ public class snakeControllScript : MonoBehaviour
 
     public GameObject prefabBodyPart; // Prefab for body parts, assign in inspector if needed
 
+    public float gameSlow;
+
     public List<GameObject> bodyParts = new List<GameObject>(); // List to hold body parts, max 100 parts
 
     internal Vector3 direction = new Vector3(1, 0, 0); //initial direction to the right
@@ -25,6 +27,9 @@ public class snakeControllScript : MonoBehaviour
 
     private void Update()
     {
+        CheckIfInBorder();
+
+
         if (!canChangeDirection) return;
 
 
@@ -61,7 +66,7 @@ public class snakeControllScript : MonoBehaviour
             // Move the head in the current direction
             transform.position += direction;
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(gameSlow * 0.1f);
 
             // Move each body part to the position of the part in front of it
             for (int i = bodyParts.Count - 1; i > 0; i--)
@@ -81,14 +86,28 @@ public class snakeControllScript : MonoBehaviour
         bodyParts.Add(Instantiate(prefabBodyPart, bodyParts[bodyParts.Count - 1].transform.position, Quaternion.identity));
 
     }// End of PickedApple()
-    
-    private void OnTriggerEnter2D(Collider2D other) {
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.tag == "BodyPart" && bodyParts.Count > 2)
         {
             // Restart the game by reloading the current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ReloadScene();
             //Debug.Log("Game Over");
         }
+    }
+    
+    internal void CheckIfInBorder()
+    {
+        if(Mathf.Abs(transform.position.x) > 17.5f || Mathf.Abs(transform.position.y) > 9.5f)
+        {
+            ReloadScene();
+        }
+    }
+
+    internal void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
 }// End of snakeControllScript class
